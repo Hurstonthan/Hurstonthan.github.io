@@ -1,0 +1,22 @@
+---
+---
+
+/* Custom tweaks that sit on top of minima.css  */
+
+.hero          { text-align:center; margin:3rem 0 2rem; }
+.hero .name    { color:#007acc; }
+.hero .tagline { font-size:1.1rem; line-height:1.4; max-width:38rem; margin:0 auto 1.5rem; }
+
+table          { margin:1.5rem auto; }
+
+@media (prefers-color-scheme: dark) {
+  body   { background:#0d1117; color:#c9d1d9; }
+  a      { color:#58a6ff; }
+  .hero .name { color:#58a6ff; }
+}
+
+.social-icons {
+  display:flex; gap:.75rem; justify-content:center; margin:1rem 0;
+  .icon { color:inherit; transition:opacity .2s; }
+  .icon:hover { opacity:.7; }
+}

@@ -4,9 +4,9 @@ title: Home
 ---
 
 <div class="hero">
-  <h1>Hi, I’m <span class="name">Hidas Hurston</span> 👋</h1>
+  <h1>Hi, I’m <span class="name">Tri Than</span> 👋</h1>
   <p class="tagline">
-    Digital-design engineer focused on ultra-low-latency FPGA & TCP/IP stacks for high-frequency trading.
+    Digital-design engineer focused on ultra-low-latency FPGA & Computer Architecture.
   </p>
   {% include social.html %}
 </div>
@@ -29,8 +29,7 @@ title: Home
 | 2024 | **[DDR5 Memory Controller](/ddr5-controller.html)** | Bank-group-aware scheduler, 92 % row-hit |
 | 2024 | **[In-Order Computer Architecture](/in-order-cpu.html)** | 5-stage RISC-V core @ 300 MHz |
 
-👉 **See more on the [Projects page](/projects.html).**
+
 
 ---
 
-*Newest blog posts appear below automatically.*

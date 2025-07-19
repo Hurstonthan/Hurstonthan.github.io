@@ -10,8 +10,9 @@ theme: minima
 # ---- Minima social icons ----
 minima:
   social_links:
-    github:   Hurstonthan          # your GitHub username
-    linkedin: hidas-hurston        # LinkedIn “handle” (the part after /in/)
+    email: trithan511@gmail.com
+    github:   https://github.com/Hurstonthan          # your GitHub username
+    linkedin: https://www.linkedin.com/in/tri-than/        # LinkedIn “handle” (the part after /in/)
     # twitter:  your_twitter       # add others if you want
 
 # ---- Plugins (optional) ----
