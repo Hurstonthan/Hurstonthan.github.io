@@ -23,8 +23,8 @@ permalink: /fpga-nic.html
 - **Payload FIFO RX** — BRAM-based OOO buffer delivering in-order bytes to apps, with read-pointer tracking cache.
 - **FIFO TX** — BRAM-based in-order buffer, base checksum accumulation, TX cache for segment pointers & fast retransmit.
 
-![System Overview]({{ "/doc/HFT_top.png" | relative_url }})
-*Figure S.1 — System-level overview.*
+![System Overview]({{ "/doc/network_top.png" | relative_url }})
+<p align="center"><em>Figure S.1 — System-level overview.</em></p>
 
 
 ## Block Diagram
@@ -32,7 +32,7 @@ permalink: /fpga-nic.html
 *(insert diagram or description here)*
 
 ![Block Diagram]({{ "/doc/block-diagram.png" | relative_url }})
-*Figure B.1 — Top-level NIC block diagram.*
+<p align="center"><em>Figure B.1 — Top-level NIC block diagram.</em></p>
 
 ---
 
@@ -41,7 +41,7 @@ permalink: /fpga-nic.html
 The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (XGMII→AXIS) and sent on TX (AXIS→XGMII). Control uses **VALID/READY**; framing uses **LAST**;
 
 ![AXIS Overview]({{ "/doc/axis-overview.png" | relative_url }})
-*Figure A.1 — AXIS bridging at RX/TX boundaries.*
+<p align="center"><em>Figure A.1 — AXIS bridging at RX/TX boundaries.</em></p>
 
 **RX Path (XGMII → AXIS)**  
 - Start-of-frame detected from XGMII control; CRC verified in parallel.  
@@ -65,7 +65,7 @@ Supports zero-padding to ensure the minimum Ethernet frame size.
 Implements back-pressure handling by generating PAUSE frames.
 
 ![MAC Layer]({{ "/doc/mac-layer.png" | relative_url }})
-*Figure M.1 — MAC datapath, CRC, PAUSE flow.*
+<p align="center"><em>Figure M.1 — MAC datapath, CRC, PAUSE flow.</em></p>
 
 **Details**
 - 64-bit XGMII data + 8-bit control alignment at line rate (156.25 MHz transmitting clock).  
@@ -81,7 +81,7 @@ Supports IPv4, including header checksum calculation.
 Supports TCP and UDP protocols.  
 
 ![IP Layer]({{ "/doc/ip-layer.png" | relative_url }})
-*Figure I.1 — IP parsing pipeline and checksum unit.*
+<p align="center"><em>Figure I.1 — IP parsing pipeline and checksum unit.</em></p>
 
 **Details**
 - IPv4 header checksum folding and finalize in-line.  
@@ -96,7 +96,7 @@ Supports TCP and UDP protocols.
 The TCP layer consists of three main modules — **TCP Receiver**, **TCP Transmitter**, and **TCP Flow Logic** — along with supporting modules.
 
 ![TCP Layer]({{ "/doc/tcp-layer.png" | relative_url }})
-*Figure T.1 — TCP RX/TX/Flow control orchestration.*
+<p align="center"><em>Figure T.1 — TCP RX/TX/Flow control orchestration.</em></p>
 
 ### TCP Receiver
 Parses and extracts the sequence number, acknowledgment number, checksum, receive window, and control flags from incoming TCP segments. Communicates with TCP Flow Logic to process packets in compliance with RFC 793+, ignoring duplicate data, handling out-of-order packets, and trimming duplicate bytes.
@@ -122,7 +122,7 @@ Delivers in-order packets to application modules (e.g., SoupBinTCP) by tracking 
 Communicates with TCP Flow Logic to manage a small cache array that stores the read pointer for the next in-order byte.
 
 ![Payload FIFO RX]({{ "/doc/payload-fifo-rx.png" | relative_url }})
-*Figure R.1 — RX FIFO with OOO accept / in-order release.*
+<p align="center"><em>Figure R.1 — RX FIFO with OOO accept / in-order release.</em></p>
 
 **Details**
 - Segment placement by sequence number; duplicate/overlap trimming.  
@@ -140,7 +140,7 @@ On fast retransmission requests from TCP Flow Logic, retrieves the earliest unac
 When a new acknowledgment number is received, updates the acknowledged byte count and removes the corresponding segments from the TX cache.
 
 ![FIFO TX]({{ "/doc/fifo-tx.png" | relative_url }})
-*Figure X.1 — TX FIFO with base-sum accumulation and TX cache.*
+<p align="center"><em>Figure X.1 — TX FIFO with base-sum accumulation and TX cache.</em></p>
 
 **Details**
 - Base checksum accumulation amortizes per-segment TCP checksum finalize.  
