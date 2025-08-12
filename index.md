@@ -26,9 +26,9 @@ title: Home
 | Year | Project | Snapshot |
 |------|---------|----------|
 | 2025 | **[FPGA TCP Offload NIC](/fpga-nic.html)** | 64-bit XGMII, RTT &lt; 450 ns |
-| 2025 | **[Limited Order book architecture](/fpga-nic.html)** | 64-bit XGMII, RTT &lt; 450 ns |
-| 2024 | **[DDR4 Memory Controller](/ddr4-controller.html)** | Bank-group-aware scheduler, 92 % row-hit |
-| 2024 | **[Dual Cores 32-bit Computer Architecture (RISC-V)](/in-order-cpu.html)** | 5-stage pipelined RISC-V core @ 65 MHz |
+| 2025 | **[Limited Order book architecture](/order_book.html)** | Price–time matching, OUCH/SoupBinTCP, L2/L3 depth |
+| 2025 | **[DDR4 Memory Controller](/ddr4-controller.html)** | Bank-group-aware scheduler, 92 % row-hit |
+| 2024 | **[Dual Cores 32-bit Computer Architecture (RISC-V)](/in-order-cpu.html)** | 5-stage pipelined RISC-V core @ 70 MHz |
 
 
 
