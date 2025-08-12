@@ -9,7 +9,7 @@ permalink: /fpga-nic.html
 | Metric | Value |
 |--------|-------|
 | Device | Xilinx Kintex-7 325T |
-| Latency | **< 450 ns** RTT (wire-to-wire) |
+| Latency (Vivaldo simulation) | **< 450 ns** RTT (wire-to-wire) |
 | Throughput | 10 GbE line-rate |
 
 ---
@@ -37,9 +37,8 @@ The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (
 
 **RX Path (XGMII → AXIS)**  
 - Start-of-frame detected from XGMII control; CRC verified in parallel.  
-- Payload and headers stream out on **TDATA[63:0]**; **TLAST** asserted on final xgmii data.  
-- **TKEEP[7:0]** marks valid bytes on the last cycle (handles non-aligned frame tails).  
-- Cut-through mode: data can exit before full-frame CRC completes (configurable).
+- Payload and headers stream out on **TDATA[63:0]**; **TLAST** asserted on final xgmii data.    
+- Cut-through mode: MAC payloads passed before full-frame CRC completes (configurable).
 
 **TX Path (AXIS → XGMII)**  
 - Application/TCP hands data via **AXIS TX**; **LAST** define segment boundaries.  
@@ -61,7 +60,7 @@ Implements back-pressure handling by generating PAUSE frames.
 
 **Details**
 - 64-bit XGMII data + 8-bit control alignment at line rate (156.25 MHz transmitting clock).  
-- CRC-32 computed in parallel to avoid serialization stalls.  
+- CRC-32 computed in parallel while passing payloads to next network layers.  
 - Zero padding logic ensures ≥46 B Ethernet payload when needed.  
 - PAUSE frame generation feature for back-pressure; AXIS **TREADY** deassertion propagates safely.
 
@@ -71,6 +70,9 @@ Implements back-pressure handling by generating PAUSE frames.
 
 Supports IPv4, including header checksum calculation.  
 Supports TCP and UDP protocols.  
+No VLAN tag support
+No IPv6 support
+
 
 <!-- ![IP Layer]({{ "/doc/ip-layer.png" | relative_url }})
 <p align="center"><em>Figure I.1 — IP parsing pipeline and checksum unit.</em></p> -->
@@ -93,10 +95,10 @@ The TCP layer consists of three main modules — **TCP Receiver**, **TCP Transmi
 Parses and extracts the sequence number, acknowledgment number, checksum, receive window, and control flags from incoming TCP segments. Communicates with TCP Flow Logic to process packets in compliance with RFC 793+, ignoring duplicate data, handling out-of-order packets, and trimming duplicate bytes.
 
 ### TCP Transmitter
-Constructs TCP segments, computes TCP checksums, and transmits TCP headers and payloads to the IP layer. Communicates with TCP Flow Logic to ensure valid header generation and to handle fast retransmission logic. Segments are streamed over **AXIS TX** with **TLAST/TKEEP** semantics.
+Constructs TCP segments, computes TCP checksums, and transmits TCP headers and payloads to the IP layer. Communicates with TCP Flow Logic to ensure valid header generation and to handle fast retransmission logic. Segments are streamed over **AXIS TX** with **TLAST** signals.
 
 ### TCP Flow Logic
-Acts as the controller for the TCP layer, coordinating between the TCP Receiver, TCP Transmitter, and FIFO modules. Ensures that application modules receive in-order, valid packets, and that outgoing packets are valid. Implements window-based flow control by adjusting the advertised receive window in response to back-pressure (also controlling **TREADY** on AXIS).
+The controller for the TCP layer, coordinating between the TCP Receiver, TCP Transmitter, and FIFO modules. Ensures that application modules receive in-order, valid packets, and that outgoing packets are valid. Implements window-based flow control by adjusting the advertised receive window in response to back-pressure (controlling **TREADY** on AXIS).
 
 **Details**
 - Hardware duplicate-ACK detection triggers fast retransmit.  
@@ -161,4 +163,4 @@ When a new acknowledgment number is received, updates the acknowledged byte coun
 
 ## Source
 
-Code on GitHub → <https://github.com/Hurstonthan/fpga-tcp-nic>
+Code on GitHub → <https://github.com/Hurstonthan/HFT_sim/tree/HFT_sim_Tri>
