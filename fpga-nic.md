@@ -23,7 +23,7 @@ permalink: /fpga-nic.html
 - **Payload FIFO RX** — BRAM-based OOO buffer delivering in-order bytes to apps, with read-pointer tracking cache.
 - **FIFO TX** — BRAM-based in-order buffer, base checksum accumulation, TX cache for segment pointers & fast retransmit.
 
-![System Overview]({{ "/doc/fpaga-nic/network_top.png" | relative_url }})
+![System Overview]({{ "/doc/fpga/network_top.png" | relative_url }})
 <p align="center"><em>Figure S.1 — System-level overview.</em></p>
 
 
@@ -32,7 +32,7 @@ permalink: /fpga-nic.html
 
 The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (XGMII→AXIS) and sent on TX (AXIS→XGMII). Control uses **VALID/READY**; framing uses **LAST**;
 
-<!-- ![AXIS Overview]({{ "/doc/fpaga-nic/axis-overview.png" | relative_url }})
+<!-- ![AXIS Overview]({{ "/doc/fpga/axis-overview.png" | relative_url }})
 <p align="center"><em>Figure A.1 — AXIS bridging at RX/TX boundaries.</em></p> -->
 
 **RX Path (XGMII → AXIS)**  
@@ -55,7 +55,7 @@ Implements parallel CRC computation (64-bit input, 32-bit output).
 Supports zero-padding to ensure the minimum Ethernet frame size.  
 Implements back-pressure handling by generating PAUSE frames.
 
-<!-- ![MAC Layer]({{ "/doc/fpaga-nic/mac-lay.png" | relative_url }})
+<!-- ![MAC Layer]({{ "/doc/fpga/mac-lay.png" | relative_url }})
 <p align="center"><em>Figure M.1 — MAC datapath.</em></p> -->
 
 **Details**
@@ -74,7 +74,7 @@ No VLAN tag support
 No IPv6 support
 
 
-<!-- ![IP Layer]({{ "/doc/fpaga-nic/ip-layer.png" | relative_url }})
+<!-- ![IP Layer]({{ "/doc/fpga/ip-layer.png" | relative_url }})
 <p align="center"><em>Figure I.1 — IP parsing pipeline and checksum unit.</em></p> -->
 
 **Details**
@@ -88,7 +88,7 @@ No IPv6 support
 
 The TCP layer consists of three main modules — **TCP Receiver**, **TCP Transmitter**, and **TCP Flow Logic** — along with supporting modules.
 
-<!-- ![TCP Layer]({{ "/doc/fpaga-nic/tcp-layer.png" | relative_url }})
+<!-- ![TCP Layer]({{ "/doc/fpga/tcp-layer.png" | relative_url }})
 <p align="center"><em>Figure T.1 — TCP RX/TX/Flow control orchestration.</em></p> -->
 
 ### TCP Receiver
@@ -114,7 +114,7 @@ BRAM-based out-of-order FIFO that stores received TCP payloads.
 Delivers in-order packets to application modules (e.g., SoupBinTCP) by tracking the number of application bytes read (`seq_rd_trk`).  
 Communicates with TCP Flow Logic to manage a small cache array that stores the read pointer for the next in-order byte.
 
-<!-- ![Payload FIFO RX]({{ "/doc/fpaga-nic/payload-fifo-rx.png" | relative_url }})
+<!-- ![Payload FIFO RX]({{ "/doc/fpga/payload-fifo-rx.png" | relative_url }})
 <p align="center"><em>Figure R.1 — RX FIFO with OOO accept / in-order release.</em></p> -->
 
 **Details**
@@ -132,7 +132,7 @@ On each transmission, stores the pointer range of the transmitted segment along 
 On fast retransmission requests from TCP Flow Logic, retrieves the earliest unacknowledged segment pointers and checksum sums from the TX cache and retransmits the data.  
 When a new acknowledgment number is received, updates the acknowledged byte count and removes the corresponding segments from the TX cache.
 
-<!-- ![FIFO TX]({{ "/doc/fpaga-nic/fifo-tx.png" | relative_url }})
+<!-- ![FIFO TX]({{ "/doc/fpga/fifo-tx.png" | relative_url }})
 <p align="center"><em>Figure X.1 — TX FIFO with base-sum accumulation and TX cache.</em></p> -->
 
 **Details**
@@ -148,15 +148,15 @@ When a new acknowledgment number is received, updates the acknowledged byte coun
 - GTK Waveforms visualize exchange payloads from client to sever and vice versa to demonstrate a complete datapath of MAC layer, IP layer and protocol layer in transmitting and receiving datapath.
   
 - **MAC**  
-  ![MAC Result]({{ "/doc/fpaga-nic/MAC_result.png" | relative_url }})
+  ![MAC Result]({{ "/doc/fpga/MAC_result.png" | relative_url }})
   <p align="center"><em>Figure I.1 — MAC datapath and CRC frame verification.</em></p>
 
 - **IP**  
-  ![IP Result]({{ "/doc/fpaga-nic/IP_result.png" | relative_url }})
+  ![IP Result]({{ "/doc/fpga/IP_result.png" | relative_url }})
   <p align="center"><em>Figure I.1 — IP datapath and CRC frame verification.</em></p>
 
 - **Protocol**  
-  ![Protocol Result]({{ "/doc/fpaga-nic/TCP_result.png" | relative_url }})
+  ![Protocol Result]({{ "/doc/fpga/TCP_result.png" | relative_url }})
   <p align="center"><em>Figure I.1 — TCP datapath and CRC frame verification.</em></p>
 
 ---
