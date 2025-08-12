@@ -16,9 +16,9 @@ permalink: /fpga-nic.html
 
 ## Summary
 
-- **AXI4-Stream Paths** — RX and TX run on AXIS 64-bit AXIS stream, cut-through framing, and clean handshakes (VALID/READY) to upper pipelines.
+- **AXI4-Stream Paths** — RX and TX run on AXIS 64-bit AXIS stream, cut-through framing, and clean handshakes (VALID/READY) to app.
 - **MAC Layer** — 10 GbE PCS/PMA interface (64b datapath, 8b control), parallel CRC-32, padding to minimum Ethernet frame, 802.3x PAUSE generate.
-- **IP Layer** — IPv4 with header checksum, TCP/UDP support,.
+- **IP Layer** — IPv4 with header checksum, TCP/UDP support.
 - **TCP Layer** — Receiver, Transmitter, and Flow Logic with RFC 793+ behaviors (OOO handling, duplicate trimming, fast retransmit with duplicate ACKs).
 - **Payload FIFO RX** — BRAM-based OOO buffer delivering in-order bytes to apps, with read-pointer tracking cache.
 - **FIFO TX** — BRAM-based in-order buffer, base checksum accumulation, TX cache for segment pointers & fast retransmit.
@@ -51,7 +51,7 @@ The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (
 
 ## MAC Layer
 
-Supports a 10 GbE interface from the AMD IP PCS/PMA with a 64-bit data path and an 8-bit byte control signal.  
+Supports a 10 GbE interface from the AMD IP PCS/PMA with a 64-bit data path and a byte control signal.  
 Implements parallel CRC computation (64-bit input, 32-bit output).  
 Supports zero-padding to ensure the minimum Ethernet frame size.  
 Implements back-pressure handling by generating PAUSE frames.
@@ -62,7 +62,7 @@ Implements back-pressure handling by generating PAUSE frames.
 **Details**
 - 64-bit XGMII data + 8-bit control alignment at line rate (156.25 MHz transmitting clock).  
 - CRC-32 computed in parallel to avoid serialization stalls.  
-- Padding logic ensures ≥46 B Ethernet payload when needed.  
+- Zero padding logic ensures ≥46 B Ethernet payload when needed.  
 - PAUSE frame generation feature for back-pressure; AXIS **TREADY** deassertion propagates safely.
 
 ---
@@ -134,20 +134,28 @@ When a new acknowledgment number is received, updates the acknowledged byte coun
 <p align="center"><em>Figure X.1 — TX FIFO with base-sum accumulation and TX cache.</em></p> -->
 
 **Details**
-- Base checksum accumulation amortizes per-segment TCP checksum finalize.  
+- Base checksum accumulation per-segment TCP checksum finalize.  
 - TX cache accelerates selective/fast retransmit without recompute.  
-- Clean AXIS **TLAST** segmentation; **TKEEP** masks short tails; **TREADY** honors downstream pressure.
+- Clean AXIS **TLAST** segmentation to indicate the last payload.
+
+## Implementation and Testing
+- Using Verilator and customized makefile to generate unit testcases for each module
+- A client–server simulation was performed by integrating the MAC, IP, and protocol modules, and instantiating two top-level modules to exchange data across the network layers.
 
 ## Results
-
+- GTK Waveforms visualize exchange payloads from client to sever and vice versa to demonstrate a complete datapath of MAC layer, IP layer and protocol layer in transmitting and receiving datapath.
+  
 - **MAC**  
   ![MAC Result]({{ "/doc/MAC_result.png" | relative_url }})
+  <p align="center"><em>Figure I.1 — MAC datapath and CRC frame verification.</em></p>
 
 - **IP**  
   ![IP Result]({{ "/doc/IP_result.png" | relative_url }})
+  <p align="center"><em>Figure I.1 — IP datapath and CRC frame verification.</em></p>
 
 - **Protocol**  
   ![Protocol Result]({{ "/doc/TCP_result.png" | relative_url }})
+  <p align="center"><em>Figure I.1 — TCP datapath and CRC frame verification.</em></p>
 
 ---
 
