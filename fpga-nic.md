@@ -27,21 +27,13 @@ permalink: /fpga-nic.html
 <p align="center"><em>Figure S.1 — System-level overview.</em></p>
 
 
-## Block Diagram
-
-*(insert diagram or description here)*
-
-![Block Diagram]({{ "/doc/block-diagram.png" | relative_url }})
-<p align="center"><em>Figure B.1 — Top-level NIC block diagram.</em></p>
-
----
 
 ## AXI4-Stream (AXIS) RX/TX Paths
 
 The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (XGMII→AXIS) and sent on TX (AXIS→XGMII). Control uses **VALID/READY**; framing uses **LAST**;
 
-![AXIS Overview]({{ "/doc/axis-overview.png" | relative_url }})
-<p align="center"><em>Figure A.1 — AXIS bridging at RX/TX boundaries.</em></p>
+<!-- ![AXIS Overview]({{ "/doc/axis-overview.png" | relative_url }})
+<p align="center"><em>Figure A.1 — AXIS bridging at RX/TX boundaries.</em></p> -->
 
 **RX Path (XGMII → AXIS)**  
 - Start-of-frame detected from XGMII control; CRC verified in parallel.  
@@ -59,19 +51,19 @@ The NIC exposes **AXIS** at both TX and RX datapath. Frames are received on RX (
 
 ## MAC Layer
 
-Supports a 10 GbE interface from the AMD PCS/PMA with a 64-bit data path and an 8-bit byte control signal.  
+Supports a 10 GbE interface from the AMD IP PCS/PMA with a 64-bit data path and an 8-bit byte control signal.  
 Implements parallel CRC computation (64-bit input, 32-bit output).  
 Supports zero-padding to ensure the minimum Ethernet frame size.  
 Implements back-pressure handling by generating PAUSE frames.
 
-![MAC Layer]({{ "/doc/mac-layer.png" | relative_url }})
-<p align="center"><em>Figure M.1 — MAC datapath, CRC, PAUSE flow.</em></p>
+<!-- ![MAC Layer]({{ "/doc/mac-lay.png" | relative_url }})
+<p align="center"><em>Figure M.1 — MAC datapath.</em></p> -->
 
 **Details**
 - 64-bit XGMII data + 8-bit control alignment at line rate (156.25 MHz transmitting clock).  
 - CRC-32 computed in parallel to avoid serialization stalls.  
 - Padding logic ensures ≥46 B Ethernet payload when needed.  
-- PAUSE frame generation on ingress/egress pressure; AXIS **TREADY** deassertion propagates safely.
+- PAUSE frame generation feature for back-pressure; AXIS **TREADY** deassertion propagates safely.
 
 ---
 
@@ -80,14 +72,13 @@ Implements back-pressure handling by generating PAUSE frames.
 Supports IPv4, including header checksum calculation.  
 Supports TCP and UDP protocols.  
 
-![IP Layer]({{ "/doc/ip-layer.png" | relative_url }})
-<p align="center"><em>Figure I.1 — IP parsing pipeline and checksum unit.</em></p>
+<!-- ![IP Layer]({{ "/doc/ip-layer.png" | relative_url }})
+<p align="center"><em>Figure I.1 — IP parsing pipeline and checksum unit.</em></p> -->
 
 **Details**
 - IPv4 header checksum folding and finalize in-line.  
-- Protocol demux for TCP/UDP with minimal added latency.  
-- Stateless IPv6 header parse to feed upper layers.  
-- Optional 802.1Q VLAN tag extraction & pass-through via AXIS sideband.
+- Layer supports for TCP/UDP protocol with minimal added latency.
+- IPv4 parsing and IP checksum calculation
 
 ---
 
@@ -95,8 +86,8 @@ Supports TCP and UDP protocols.
 
 The TCP layer consists of three main modules — **TCP Receiver**, **TCP Transmitter**, and **TCP Flow Logic** — along with supporting modules.
 
-![TCP Layer]({{ "/doc/tcp-layer.png" | relative_url }})
-<p align="center"><em>Figure T.1 — TCP RX/TX/Flow control orchestration.</em></p>
+<!-- ![TCP Layer]({{ "/doc/tcp-layer.png" | relative_url }})
+<p align="center"><em>Figure T.1 — TCP RX/TX/Flow control orchestration.</em></p> -->
 
 ### TCP Receiver
 Parses and extracts the sequence number, acknowledgment number, checksum, receive window, and control flags from incoming TCP segments. Communicates with TCP Flow Logic to process packets in compliance with RFC 793+, ignoring duplicate data, handling out-of-order packets, and trimming duplicate bytes.
@@ -121,8 +112,8 @@ BRAM-based out-of-order FIFO that stores received TCP payloads.
 Delivers in-order packets to application modules (e.g., SoupBinTCP) by tracking the number of application bytes read (`seq_rd_trk`).  
 Communicates with TCP Flow Logic to manage a small cache array that stores the read pointer for the next in-order byte.
 
-![Payload FIFO RX]({{ "/doc/payload-fifo-rx.png" | relative_url }})
-<p align="center"><em>Figure R.1 — RX FIFO with OOO accept / in-order release.</em></p>
+<!-- ![Payload FIFO RX]({{ "/doc/payload-fifo-rx.png" | relative_url }})
+<p align="center"><em>Figure R.1 — RX FIFO with OOO accept / in-order release.</em></p> -->
 
 **Details**
 - Segment placement by sequence number; duplicate/overlap trimming.  
@@ -139,13 +130,24 @@ On each transmission, stores the pointer range of the transmitted segment along 
 On fast retransmission requests from TCP Flow Logic, retrieves the earliest unacknowledged segment pointers and checksum sums from the TX cache and retransmits the data.  
 When a new acknowledgment number is received, updates the acknowledged byte count and removes the corresponding segments from the TX cache.
 
-![FIFO TX]({{ "/doc/fifo-tx.png" | relative_url }})
-<p align="center"><em>Figure X.1 — TX FIFO with base-sum accumulation and TX cache.</em></p>
+<!-- ![FIFO TX]({{ "/doc/fifo-tx.png" | relative_url }})
+<p align="center"><em>Figure X.1 — TX FIFO with base-sum accumulation and TX cache.</em></p> -->
 
 **Details**
 - Base checksum accumulation amortizes per-segment TCP checksum finalize.  
 - TX cache accelerates selective/fast retransmit without recompute.  
 - Clean AXIS **TLAST** segmentation; **TKEEP** masks short tails; **TREADY** honors downstream pressure.
+
+## Results
+
+- **MAC**  
+  ![MAC Result]({{ "/doc/MAC_result.png" | relative_url }})
+
+- **IP**  
+  ![IP Result]({{ "/doc/IP_result.png" | relative_url }})
+
+- **Protocol**  
+  ![Protocol Result]({{ "/doc/TCP_result.png" | relative_url }})
 
 ---
 
