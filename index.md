@@ -15,7 +15,7 @@ title: Home
 
 ### What I work with
 
-- **Hardware:** Kintex-7 / Versal, PCIe, DDR4/DDR5 controllers  
+- **Hardware:** Kintex-7 / Versal, PCIe, DDR4/DDR5 controllers, PCIe  
 - **Network:** 10 GbE MACs, custom TCP/UDP pipelines  
 - **Languages:** SystemVerilog, C/C++, Python  
 - **Verifcatoin:** UVM, Verilator
