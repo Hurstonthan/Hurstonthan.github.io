@@ -36,9 +36,8 @@ make questa UVM_HOME=$QUESTA_HOME/uvm-1.2
 - Scoreboard pairs *expected* (from Driver AP) vs *observed* (from Monitor AP) in order.
 
 ### Logs / Seeds
-- Build invokes `-sv_seed random` (tool‑controlled).  
-- UVM verbosity: `UVM_MEDIUM` by default (override with `+UVM_VERBOSITY=UVM_HIGH`).  
-- Enable config DB tracing with `+UVM_CONFIG_DB_TRACE` if debugging VI bindings.
+- Build invokes random tests through `-sv_seed random`.
+- Enable config DB tracing with `+UVM_CONFIG_DB_TRACE`.
 
 ### Coverage (functional checklist)
 - [x] Good frame, SOF lane0
@@ -47,8 +46,6 @@ make questa UVM_HOME=$QUESTA_HOME/uvm-1.2
 - [x] Bad destination drop
 - [ ] VLAN‑tagged frames
 - [ ] Early `/T/` (runt) / code violation
-- [ ] Jumbo frames
-- [ ] Inter‑frame gap stress
 - [ ] Randomized payload lengths and seeds (constrained)
 
 ### Next Steps
@@ -59,7 +56,7 @@ make questa UVM_HOME=$QUESTA_HOME/uvm-1.2
 ---
 
 ## Implementation and Testing
-- UVM TB (Questa/VCS/Xcelium/Riviera) with industry‑style class separation and two tests:  
+- UVM TB (Questa) with industry‑style class separation and two tests:  
   `mac_rx_smoke_test`, `mac_rx_alignment_and_error_test`.
 - DUT + TB wiring in `tb/top.sv`; virtual interfaces set via UVM config DB.
 
