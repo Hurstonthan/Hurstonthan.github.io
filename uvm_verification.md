@@ -5,7 +5,7 @@ permalink: /uvm_verification.html
 ---
 ## UVM Verification — **MAC_rx**
 
-**Environment** (industry‑style separation):
+**Features**:
 - `xgmii_if` (driver modport) → drives `xgmii_rxd/rxc` (control chars `/S/`, `/T/`, IDLE).  
 - `mac_rx_out_if` (monitor modport) → samples `MAC_payload_rcv`, `MAC_valid`, `CRC_flush`, `frame_ok`, `bytes_rcv_len`.  
 - `xgmii_sequencer`, `xgmii_driver`, `mac_rx_monitor`, `mac_rx_scoreboard`, `xgmii_agent`, `mac_rx_env`.  
