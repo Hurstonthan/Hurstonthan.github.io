@@ -30,6 +30,8 @@ title: Home
 | 2025 | **[UVM Verification](/uvm_verification.html)** | UVM-based test for 10G MAC rx |
 | 2025 | **[DDR4 Memory Controller](/ddr4-controller.html)** | Bank-group-aware scheduler, 92 % row-hit |
 | 2024 | **[Dual Cores 32-bit Computer Architecture (RISC-V)](/in-order-cpu.html)** | 5-stage pipelined RISC-V core @ 70 MHz |
+| 2024 | **[64x64 LED matrix with STM32](/tetris.html)** | STM32, Interrupt, ADC, Mutex |
+| 2023 | **[Audio equalizer](/audio_equal.html)** | Circuit design, Oscilllopse, Multimeter |
 
 
 
