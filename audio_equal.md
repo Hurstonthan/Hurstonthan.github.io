@@ -1,7 +1,7 @@
 ---
 layout: page
 title: A Basic Audio Equalizer
-permalink: /audio-equal.html
+permalink: /audio_equal.html
 ---
 
 ## Summary
