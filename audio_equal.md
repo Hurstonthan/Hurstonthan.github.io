@@ -21,7 +21,7 @@ permalink: /audio_equal.html
 **Five conceptual stages:** input → filtering (HPF, BPF, LPF) → per-band adjustable gain → recombination via summing amplifier → power amplifier to speaker. Voltage buffers (LM324) decouple filter sections; the LM386 provides final drive.
 
 ![Architecture Placeholder]({{ "/doc/audio_eq/audio_pic1.png" | relative_url }})
-<p align="center"><em>Figure 1 — Block diagram of stages (placeholder).</em></p>
+<p align="center"><em>Figure 1 — Block diagram of stages.</em></p>
 
 ---
 
@@ -32,7 +32,7 @@ permalink: /audio_equal.html
 - **Measured examples:** HPF ~3.02 kHz at ~−3 dB; LPF ~316 Hz; BPF ~316 Hz and 3.162 kHz at ~−3.2/−3.27 dB.  
 
 ![Filters Placeholder]({{ "/doc/audio_eq/audio_pic2.png" | relative_url }})
-<p align="center"><em>Figure 2 — HPF/LPF/BPF schematics & target responses (placeholder).</em></p>
+<p align="center"><em>Figure 2 — LPF signal ex.</em></p>
 
 ---
 
@@ -42,11 +42,11 @@ Each band uses an inverting LM324 stage with a 10 kΩ potentiometer in the feedb
 A_v = -Rf/Rin. Positive input at ground, negative input takes the filter output. Rails at ±5 V.
 
 ![Gain Stage Placeholder]({{ "/doc/audio_eq/audio_pic3.png" | relative_url }})
-<p align="center"><em>Figure 3 — Adjustable inverting gain stage (placeholder).</em></p>
+<p align="center"><em>Figure 3 — Adjustable inverting gain stage.</em></p>
 
 ---
 
-## Summing Amplifier (Recombination & Master Volume)
+## Summing Amplifier
 
 A summing inverting amplifier (LM324) combines band outputs. Example: Rin=33 kΩ per band and Rf≈68 kΩ (or a pot) to target gain ≈ 2 overall (tunable). This stage doubles as master volume.
 
@@ -103,14 +103,5 @@ Representative parts: LM324, LM386, 0.01 µF / 0.1 µF / 200 µF capacitors, 4.9
 - **Issues** — Clipping/noise in some settings; possible causes: LM324 headroom and LM386 non-inverting configuration plus layout/grounding.  
 - **Next Steps** — Consider inverting power stage to reduce distortion; increase pot values for finer control; increase output coupling capacitance to reduce low-frequency ripple/noise.
 
-![Discussion Placeholder]({{ "/doc/audio_eq/discussion.png" | relative_url }})
-<p align="center"><em>Figure 8 — Example scope captures for discussion (placeholder).</em></p>
 
 ---
-
-## References
-
-- Final project report and figures informing specs, values, and results.
-
-![References Placeholder]({{ "/doc/audio_eq/references.png" | relative_url }})
-<p align="center"><em>Figure 9 — References (placeholder).</em></p>
